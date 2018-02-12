@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="5dp">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/imageView"
@@ -27,7 +26,7 @@
         android:paddingLeft="10dp">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/txtName"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:paddingTop="5dp"
@@ -37,7 +36,7 @@
             android:typeface="normal" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/txtTime"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="130 phút"
@@ -52,7 +51,6 @@
         android:layout_height="2dp"
         android:layout_alignBottom="@+id/imageView"
         android:layout_alignParentBottom="false"
-        android:layout_alignParentEnd="false"
         android:background="#ccc"
         android:text="TextView" />
 
