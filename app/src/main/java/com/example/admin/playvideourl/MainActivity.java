@@ -19,7 +19,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         videoView = findViewById(R.id.videoView);
-        videoView.setVideoPath("http://www.html5videoplayer.net/videos/toystory.mp4");
+        //videoView.setVideoPath("http://www.html5videoplayer.net/videos/toystory.mp4");
+        videoView.setVideoPath("https://dominhhaiapps.000webhostapp.com/1.1_introduction.mp4");
+
         if (mediaController == null) {
             mediaController = new MediaController(MainActivity.this);
             // set the video view that acts as the anchor for media controller
