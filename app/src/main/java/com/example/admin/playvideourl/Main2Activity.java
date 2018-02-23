@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -15,8 +16,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main2Activity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -31,6 +37,10 @@ public class Main2Activity extends Activity
      */
     private CharSequence mTitle;
 
+    ListView lvFilm;
+    FilmAdapter filmAdapter;
+    List<Film> films;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +54,19 @@ public class Main2Activity extends Activity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        films = setUpFilms();
+        lvFilm = findViewById(R.id.lvFilm);
+        filmAdapter = new FilmAdapter(this, films);
+        lvFilm.setAdapter(filmAdapter);
+        lvFilm.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Object item = adapterView.getItemAtPosition(i);
+                Intent intent = new Intent(Main2Activity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -116,4 +139,10 @@ public class Main2Activity extends Activity
         }
     }
 
+    private List<Film> setUpFilms(){
+        List<Film> filmList = new ArrayList<>();
+        filmList.add(new Film("THẦN SẤM 3: THỜI KHẮC TẬN THẾ", 180, "film.mp4"));
+        filmList.add(new Film("THẦN SẤM 3: THỜI KHẮC TẬN THẾ", 180, "film.mp4"));
+        return filmList;
+    }
 }

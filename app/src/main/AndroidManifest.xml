@@ -25,6 +25,7 @@
         <activity android:name=".MenuActivity" />
         <activity
             android:name=".MainActivity"
+            android:theme="@style/Theme.AppCompat"
             android:configChanges="orientation|screenSize"></activity>
     </application>
 

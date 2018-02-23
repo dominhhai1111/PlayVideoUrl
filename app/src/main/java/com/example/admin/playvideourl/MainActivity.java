@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     int position = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(android.R.style.Theme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         videoView = findViewById(R.id.videoView);
