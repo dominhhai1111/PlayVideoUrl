@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,11 +19,20 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static android.content.ContentValues.TAG;
 
 public class Main2Activity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -37,9 +47,12 @@ public class Main2Activity extends Activity
      */
     private CharSequence mTitle;
 
+    String URL_GET_FILM = "https://dominhhaiapps.000webhostapp.com/films/";
     ListView lvFilm;
     FilmAdapter filmAdapter;
-    List<Film> films;
+    List<Film> filmsList;
+
+    FilmAsynctask filmAsynctask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +68,9 @@ public class Main2Activity extends Activity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        films = setUpFilms();
+        filmsList = new ArrayList<>();
         lvFilm = findViewById(R.id.lvFilm);
-        filmAdapter = new FilmAdapter(this, films);
+        filmAdapter = new FilmAdapter(this, filmsList);
         lvFilm.setAdapter(filmAdapter);
         lvFilm.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -67,6 +80,18 @@ public class Main2Activity extends Activity
                 startActivity(intent);
             }
         });
+
+        filmAsynctask = new FilmAsynctask(Main2Activity.this);
+        filmAsynctask.execute();
+
+        Button btnReset = findViewById(R.id.btnReset);
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //setUpFilms();
+            }
+        });
+
     }
 
     @Override
@@ -139,10 +164,35 @@ public class Main2Activity extends Activity
         }
     }
 
-    private List<Film> setUpFilms(){
-        List<Film> filmList = new ArrayList<>();
-        filmList.add(new Film("THẦN SẤM 3: THỜI KHẮC TẬN THẾ", 180, "film.mp4"));
-        filmList.add(new Film("THẦN SẤM 3: THỜI KHẮC TẬN THẾ", 180, "film.mp4"));
-        return filmList;
+    private void setUpFilms(){
+        //final List<Film> filmList = new ArrayList<>();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(URL_GET_FILM)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        APIService apiService = retrofit.create(APIService.class);
+        Call<List<Film>> call = apiService.getAllFilms();
+        call.enqueue(new Callback<List<Film>>() {
+            @Override
+            public void onResponse(Call<List<Film>> call, Response<List<Film>> response) {
+                List<Film> films = response.body();
+                for(int i = 0; i < films.size(); i++){
+                    filmsList.add(films.get(i));
+                }
+                Log.d(TAG, "Films connect " + filmsList.get(0).getName());
+            }
+
+            @Override
+            public void onFailure(Call<List<Film>> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+//        List<Film> filmList = new ArrayList<>();
+//        filmList.add(new Film("THẦN SẤM 3: THỜI KHẮC TẬN THẾ", 180, "film.mp4"));
+//        filmList.add(new Film("THẦN SẤM 3: THỜI KHẮC TẬN THẾ", 180, "film.mp4"));
+        //filmList.add(new Film("1","THẦN SẤM 3: THỜI KHẮC TẬN THẾ", "180", "film.mp4"));
+        filmAdapter.notifyDataSetChanged();
+        //return filmList;
     }
 }
