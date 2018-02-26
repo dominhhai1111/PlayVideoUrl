@@ -31,7 +31,7 @@ public class FilmAdapter extends BaseAdapter{
     }
 
     @Override
-    public Object getItem(int position) {
+    public Film getItem(int position) {
         return films.get(position);
     }
 

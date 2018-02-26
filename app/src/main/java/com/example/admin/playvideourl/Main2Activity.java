@@ -75,8 +75,9 @@ public class Main2Activity extends Activity
         lvFilm.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Object item = adapterView.getItemAtPosition(i);
+                Film film = (Film) adapterView.getItemAtPosition(i);
                 Intent intent = new Intent(Main2Activity.this, MainActivity.class);
+                intent.putExtra("film_url", film.getUrl());
                 startActivity(intent);
             }
         });

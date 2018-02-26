@@ -1,5 +1,6 @@
 package com.example.admin.playvideourl;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,9 +20,12 @@ public class MainActivity extends AppCompatActivity {
         setTheme(android.R.style.Theme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+        String film_url = intent.getStringExtra("film_url");
         videoView = findViewById(R.id.videoView);
         //videoView.setVideoPath("http://www.html5videoplayer.net/videos/toystory.mp4");
-        videoView.setVideoPath("https://dominhhaiapps.000webhostapp.com/1.1_introduction.mp4");
+        videoView.setVideoPath(film_url);
 
         if (mediaController == null) {
             mediaController = new MediaController(MainActivity.this);
