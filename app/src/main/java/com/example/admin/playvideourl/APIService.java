@@ -12,4 +12,7 @@ import retrofit2.http.GET;
 public interface APIService {
     @GET("getAllFilms")
     Call<List<Film>> getAllFilms();
+
+    @GET("getALlUsers")
+    Call<List<User>> getAllUsers();
 }
