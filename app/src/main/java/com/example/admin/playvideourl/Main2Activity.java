@@ -164,36 +164,4 @@ public class Main2Activity extends Activity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
-
-    private void setUpFilms(){
-        //final List<Film> filmList = new ArrayList<>();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URL_GET_FILM)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        APIService apiService = retrofit.create(APIService.class);
-        Call<List<Film>> call = apiService.getAllFilms();
-        call.enqueue(new Callback<List<Film>>() {
-            @Override
-            public void onResponse(Call<List<Film>> call, Response<List<Film>> response) {
-                List<Film> films = response.body();
-                for(int i = 0; i < films.size(); i++){
-                    filmsList.add(films.get(i));
-                }
-                Log.d(TAG, "Films connect " + filmsList.get(0).getName());
-            }
-
-            @Override
-            public void onFailure(Call<List<Film>> call, Throwable t) {
-                Log.e(TAG, "onFailure: " + t.getMessage());
-            }
-        });
-
-//        List<Film> filmList = new ArrayList<>();
-//        filmList.add(new Film("THẦN SẤM 3: THỜI KHẮC TẬN THẾ", 180, "film.mp4"));
-//        filmList.add(new Film("THẦN SẤM 3: THỜI KHẮC TẬN THẾ", 180, "film.mp4"));
-        //filmList.add(new Film("1","THẦN SẤM 3: THỜI KHẮC TẬN THẾ", "180", "film.mp4"));
-        filmAdapter.notifyDataSetChanged();
-        //return filmList;
-    }
 }
