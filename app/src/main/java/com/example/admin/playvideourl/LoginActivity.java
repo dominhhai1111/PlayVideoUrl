@@ -34,6 +34,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +51,8 @@ import static android.content.ContentValues.TAG;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
+
+    static boolean isLogin = false;
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -203,8 +206,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+            APIService apiService = APIService.retrofit.create(APIService.class);
+            final Call<LoginResult> call = apiService.checkLogin(email, password);
             mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            mAuthTask.execute(call);
         }
     }
 
@@ -312,7 +317,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Boolean, Boolean> {
+    public class UserLoginTask extends AsyncTask<Call, Boolean, Boolean> {
 
         private final String mEmail;
         private final String mPassword;
@@ -324,28 +329,17 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(URL_CHECK_LOGIN)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            APIService apiService = retrofit.create(APIService.class);
-            Log.d(TAG, mEmail + mPassword);
-            Call<LoginResult> call = apiService.checkLogin(mEmail, mPassword);
-            call.enqueue(new Callback<LoginResult>() {
-                @Override
-                public void onResponse(Call<LoginResult> call, Response<LoginResult> response) {
-                    LoginResult loginResult = response.body();
-                    publishProgress(loginResult.isLogin());
-                }
+        protected Boolean doInBackground(Call... params) {
 
-                @Override
-                public void onFailure(Call<LoginResult> call, Throwable t) {
-                    Log.e(TAG, "Call failed");
+            Call<LoginResult> call = params[0];
+            try {
+                Response<LoginResult> response = call.execute();
+                if(response.body().isLogin()){
+                    return true;
                 }
-            });
-
-            // TODO: register the new account here.
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             return false;
         }
 
@@ -379,8 +373,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-            Log.d(TAG, String.valueOf(sharedPreferences.getBoolean("isLogin", false)));
-            if (sharedPreferences.getBoolean("isLogin", false)) {
+            if (success) {
                 Intent intent = new Intent(LoginActivity.this, Main2Activity.class);
                 startActivity(intent);
             } else {
