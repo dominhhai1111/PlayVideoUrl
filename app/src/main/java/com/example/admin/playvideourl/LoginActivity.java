@@ -60,13 +60,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
@@ -108,6 +101,15 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             @Override
             public void onClick(View view) {
                 attemptLogin();
+            }
+        });
+
+        Button mSignUpButton = findViewById(R.id.sign_up_button);
+        mSignUpButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -206,7 +208,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            APIService apiService = APIService.retrofit.create(APIService.class);
+            APIService apiService = APIService.retrofit_login.create(APIService.class);
             final Call<LoginResult> call = apiService.checkLogin(email, password);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute(call);
@@ -321,7 +323,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         private final String mEmail;
         private final String mPassword;
-        String URL_CHECK_LOGIN= "https://dominhhaiapps.000webhostapp.com/users/";
+
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -341,18 +343,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
                 e.printStackTrace();
             }
             return false;
-        }
-
-        private void setLoginInfo(boolean isLogin){
-            if(isLogin){
-                editor.putBoolean("isLogin", true);
-                editor.apply();
-                Log.d(TAG, String.valueOf(sharedPreferences.getBoolean("isLogin", false)));
-            }else{
-                editor.putBoolean("isLogin", false);
-                editor.apply();
-                Log.d(TAG, String.valueOf(sharedPreferences.getBoolean("isLogin", false)));
-            }
         }
 
         @Override
