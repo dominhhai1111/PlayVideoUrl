@@ -16,7 +16,7 @@ import retrofit2.http.Path;
  */
 
 public interface APIService {
-    public static final String URL_CHECK_LOGIN= "https://dominhhaiapps.000webhostapp.com/users/";
+    public static final String URL_USER= "https://dominhhaiapps.000webhostapp.com/users/";
 
     @GET("getAllFilms")
     Call<List<Film>> getAllFilms();
@@ -24,8 +24,17 @@ public interface APIService {
     @GET("checkLogin/{email}/{password}")
     Call<LoginResult> checkLogin(@Path("email") String email, @Path("password") String password);
 
-    public static final Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(URL_CHECK_LOGIN)
+    public static final Retrofit retrofit_login = new Retrofit.Builder()
+            .baseUrl(URL_USER)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+
+    @FormUrlEncoded
+    @POST("checkRegisterUserAccount")
+    Call<RegisterResult> checkRegisterUserAccount(@Field("email") String email, @Field("password") String password);
+
+    public static final Retrofit retrofit_sign_up= new Retrofit.Builder()
+            .baseUrl(URL_USER)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 }
