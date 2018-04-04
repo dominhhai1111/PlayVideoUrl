@@ -15,10 +15,10 @@ import java.util.List;
 
 public class NaviAdapter extends BaseAdapter{
     private NavigationDrawerFragment context;
-    private List<String> categories;
+    private List<Category> categories;
     private LayoutInflater layoutInflater;
 
-    public NaviAdapter(NavigationDrawerFragment context, List<String> categories, LayoutInflater layoutInflater) {
+    public NaviAdapter(NavigationDrawerFragment context, List<Category> categories, LayoutInflater layoutInflater) {
         this.context = context;
         this.categories = categories;
         this.layoutInflater = layoutInflater;
@@ -30,7 +30,7 @@ public class NaviAdapter extends BaseAdapter{
     }
 
     @Override
-    public Object getItem(int position) {
+    public Category getItem(int position) {
         return categories.get(position);
     }
 
@@ -51,7 +51,7 @@ public class NaviAdapter extends BaseAdapter{
             naviViewHolder = (NaviViewHolder) convertView.getTag();
         }
 
-        naviViewHolder.txtCategory.setText(categories.get(position));
+        naviViewHolder.txtCategory.setText(categories.get(position).getName());
         return convertView;
     }
     

@@ -65,7 +65,7 @@ public class Main2Activity extends Activity
             }
         });
 
-        filmAsynctask = new FilmAsynctask(Main2Activity.this);
+        filmAsynctask = new FilmAsynctask(Main2Activity.this, "");
         filmAsynctask.execute();
     }
 
