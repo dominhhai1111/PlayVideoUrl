@@ -67,15 +67,6 @@ public class Main2Activity extends Activity
 
         filmAsynctask = new FilmAsynctask(Main2Activity.this);
         filmAsynctask.execute();
-
-        Button btnReset = findViewById(R.id.btnReset);
-        btnReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //setUpFilms();
-            }
-        });
-
     }
 
     @Override
