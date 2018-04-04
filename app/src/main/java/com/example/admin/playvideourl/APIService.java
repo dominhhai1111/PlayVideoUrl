@@ -21,6 +21,12 @@ public interface APIService {
     @GET("getAllFilms")
     Call<List<Film>> getAllFilms();
 
+    @GET("getAllCategories")
+    Call<List<Category>> getAllCategories();
+
+    @GET("getFilmsByCategory")
+    Call<List<Film>> getFilmsByCategory(@Path("cat_id") String cat_id);
+
     @GET("checkLogin/{email}/{password}")
     Call<LoginResult> checkLogin(@Path("email") String email, @Path("password") String password);
 

@@ -20,16 +20,25 @@ import static android.content.ContentValues.TAG;
 
 public class FilmAsynctask extends AsyncTask<Void, List<Film>, Void>{
     Main2Activity main2Activity;
-    String URL_GET_FILM = "https://dominhhaiapps.000webhostapp.com/films/";
+    String cat_id;
+    String URL_GET_FILM = "https://dominhhaiapps.000webhostapp.com/films/getAllFilms/";
+    String URL_GET_FILM_CAT = "https://dominhhaiapps.000webhostapp.com/films/getFilmsByCategory/";
+    String url;
 
-    public FilmAsynctask(Main2Activity main2Activity) {
+    public FilmAsynctask(Main2Activity main2Activity, String cat_id) {
         this.main2Activity = main2Activity;
+        this.cat_id = cat_id;
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
+        if (!this.cat_id.isEmpty() && this.cat_id != ""){
+            url = URL_GET_FILM_CAT + this.cat_id + "/";
+        }else{
+            url = URL_GET_FILM;
+        }
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(URL_GET_FILM)
+                .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         APIService apiService = retrofit.create(APIService.class);

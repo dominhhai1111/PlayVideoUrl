@@ -57,9 +57,12 @@ public class NavigationDrawerFragment extends Fragment {
     private ListView mDrawerListView;
     private View mFragmentContainerView;
 
-    private int mCurrentSelectedPosition = 0;
+    private int mCurrentSelectedPosition = -1;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+
+    List<Category> categories = new ArrayList<>();
+    NaviAdapter naviAdapter;
 
     public NavigationDrawerFragment() {
     }
@@ -79,7 +82,7 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         // Select either the default item (0) or the last selected item.
-        selectItem(mCurrentSelectedPosition);
+        //selectItem(mCurrentSelectedPosition);
     }
 
     @Override
@@ -97,14 +100,16 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //selectItem(position);
-                Toast.makeText(getActivity().getApplicationContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+                selectItem(position);
             }
         });
-        List<String> categories = new ArrayList<>();
-        categories.add("Phim hành động");
-        categories.add("Phim tâm lý");
-        mDrawerListView.setAdapter(new NaviAdapter(NavigationDrawerFragment.this, categories, getActivity().getLayoutInflater()));
+
+        naviAdapter = new NaviAdapter(NavigationDrawerFragment.this, categories, getActivity().getLayoutInflater());
+        mDrawerListView.setAdapter(naviAdapter);
+
+        NaviAsynctask naviAsynctask = new NaviAsynctask(NavigationDrawerFragment.this);
+        naviAsynctask.execute();
+
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }
@@ -189,6 +194,11 @@ public class NavigationDrawerFragment extends Fragment {
 
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
+        //if (position != 0){
+            FilmAsynctask filmAsynctask = new FilmAsynctask((Main2Activity) getActivity(), naviAdapter.getItem(position).getId().toString());
+            filmAsynctask.execute();
+        //}
+
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
         }
