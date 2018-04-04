@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,6 +14,8 @@ import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Response;
+
+import static android.content.ContentValues.TAG;
 
 public class RegisterActivity extends Activity {
 
@@ -36,24 +39,25 @@ public class RegisterActivity extends Activity {
         });
     }
 
-    public class RegisterUserTask extends AsyncTask<Call, RegisterResult, Response<RegisterResult>>{
+    public class RegisterUserTask extends AsyncTask<Call, RegisterResult, RegisterResult>{
 
         @Override
-        protected Response<RegisterResult> doInBackground(Call[] calls) {
+        protected RegisterResult doInBackground(Call[] calls) {
             Call<RegisterResult> call = calls[0];
             try {
                 Response<RegisterResult> response = call.execute();
-                return response;
+                Log.d(TAG, response.body().getMessage());
+                return response.body();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return new Response<RegisterResult>();
+            return new RegisterResult(false, "Neetwork error");
         }
 
         @Override
-        protected void onPostExecute(Response response) {
-            super.onPostExecute(response);
-            Toast.makeText(RegisterActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
+        protected void onPostExecute(RegisterResult registerResult) {
+            super.onPostExecute(registerResult);
+            Toast.makeText(RegisterActivity.this, registerResult.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 }
