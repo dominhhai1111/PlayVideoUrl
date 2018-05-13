@@ -337,6 +337,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             try {
                 Response<LoginResult> response = call.execute();
                 if(response.body().isLogin()){
+                    editor.putString("user_id",response.body().getUser_id());
+                    Log.d("User_id", response.body().getUser_id());
+                    editor.apply();
                     return true;
                 }
             } catch (IOException e) {

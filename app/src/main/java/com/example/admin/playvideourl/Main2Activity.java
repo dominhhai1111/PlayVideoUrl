@@ -7,6 +7,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,8 +59,9 @@ public class Main2Activity extends Activity
         lvFilm.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("lv click", "ok");
                 Film film = (Film) adapterView.getItemAtPosition(i);
-                Intent intent = new Intent(Main2Activity.this, MainActivity.class);
+                Intent intent = new Intent(Main2Activity.this, FilmDetailActivity.class);
                 intent.putExtra("film_url", film.getUrl());
                 startActivity(intent);
             }

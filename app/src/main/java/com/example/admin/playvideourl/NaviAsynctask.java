@@ -54,6 +54,7 @@ public class NaviAsynctask extends AsyncTask<Void, List<Category>, Void> {
         this.navigationDrawerFragment.categories.clear();
         // quan trong, ko phai addAll se co ko update
         this.navigationDrawerFragment.categories.addAll(values[0]);
+        this.navigationDrawerFragment.categories.add(new Category("0", "Yêu thích"));
         this.navigationDrawerFragment.naviAdapter.notifyDataSetChanged();
     }
 }
