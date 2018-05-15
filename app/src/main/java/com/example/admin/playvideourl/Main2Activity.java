@@ -62,6 +62,7 @@ public class Main2Activity extends Activity
                 Log.d("lv click", "ok");
                 Film film = (Film) adapterView.getItemAtPosition(i);
                 Intent intent = new Intent(Main2Activity.this, FilmDetailActivity.class);
+                intent.putExtra("film", film);
                 intent.putExtra("film_url", film.getUrl());
                 startActivity(intent);
             }
