@@ -25,8 +25,8 @@ public class MenuActivity extends AppCompatActivity {
 
     private List<Film> setUpFilms(){
         List<Film> filmList = new ArrayList<>();
-        filmList.add(new Film("1","THẦN SẤM 3: THỜI KHẮC TẬN THẾ", "180", "film.mp4"));
-        filmList.add(new Film("1","THẦN SẤM 3: THỜI KHẮC TẬN THẾ", "180", "film.mp4"));
+        filmList.add(new Film("1","THẦN SẤM 3: THỜI KHẮC TẬN THẾ", "180", "film.mp4", ""));
+        filmList.add(new Film("1","THẦN SẤM 3: THỜI KHẮC TẬN THẾ", "180", "film.mp4", ""));
         return filmList;
     }
 }

@@ -30,6 +30,9 @@ public interface APIService {
     @GET("checkLogin/{email}/{password}")
     Call<LoginResult> checkLogin(@Path("email") String email, @Path("password") String password);
 
+    @GET("addFilmToFavorite/{userId}/{filmId}")
+    Call<Integer> addFavorite(@Path("userId") String userId, @Path("filmId") String filmId);
+
     public static final Retrofit retrofit_login = new Retrofit.Builder()
             .baseUrl(URL_USER)
             .addConverterFactory(GsonConverterFactory.create())
