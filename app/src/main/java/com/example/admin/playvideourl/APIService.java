@@ -28,7 +28,7 @@ public interface APIService {
     Call<List<Film>> getFilmsByCategory(@Path("cat_id") String cat_id);
 
     @GET("getCommentsByFilmId")
-    Call<List<Comment>> getCommentsByFilmId(@Path("filmId") String filmId);
+    Call<List<Comment>> getCommentsByFilmId();
 
     @GET("checkLogin/{email}/{password}")
     Call<LoginResult> checkLogin(@Path("email") String email, @Path("password") String password);
