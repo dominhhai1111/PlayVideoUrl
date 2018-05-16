@@ -23,6 +23,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.ContentValues.TAG;
 
+import retrofit2.Call;
+
 public class FilmDetailActivity extends AppCompatActivity {
     String URL_GET_COMMENT = "";
     TextView txtName;
@@ -123,7 +125,3 @@ public class FilmDetailActivity extends AppCompatActivity {
         }
     }
 }
-
-
-
-
