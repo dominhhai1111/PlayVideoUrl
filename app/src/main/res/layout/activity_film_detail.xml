@@ -158,7 +158,7 @@
     <LinearLayout
         android:id="@+id/layout4"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="false"
         android:layout_alignParentLeft="false"
         android:layout_alignParentRight="false"
@@ -169,7 +169,7 @@
         <ListView
             android:id="@+id/lvComments"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </RelativeLayout>

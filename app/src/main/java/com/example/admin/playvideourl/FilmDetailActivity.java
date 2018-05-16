@@ -26,7 +26,7 @@ import static android.content.ContentValues.TAG;
 import retrofit2.Call;
 
 public class FilmDetailActivity extends AppCompatActivity {
-    String URL_GET_COMMENT = "";
+    String URL_GET_COMMENT = "https://dominhhaiapps.000webhostapp.com/comments/getCommentsByFilmId/";
     TextView txtName;
     TextView txtTime;
     TextView txtLike;
@@ -94,12 +94,13 @@ public class FilmDetailActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            String url = URL_GET_COMMENT + film.getId() + "/";
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(URL_GET_COMMENT)
+                    .baseUrl(url)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             APIService apiService = retrofit.create(APIService.class);
-            Call<List<com.example.admin.playvideourl.Comment>> call = apiService.getCommentsByFilmId(film.getId());
+            Call<List<com.example.admin.playvideourl.Comment>> call = apiService.getCommentsByFilmId();
             call.enqueue(new Callback<List<com.example.admin.playvideourl.Comment>>() {
                 @Override
                 public void onResponse(Call<List<com.example.admin.playvideourl.Comment>> call, Response<List<com.example.admin.playvideourl.Comment>> response) {
@@ -117,8 +118,9 @@ public class FilmDetailActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onProgressUpdate(List<Comment>... values) {
+        protected void onProgressUpdate(List<Comment>[] values) {
             super.onProgressUpdate(values);
+            Log.d("comment", values[0].get(0).getContent());
             commentList.clear();
             commentList.addAll(values[0]);
             commentAdapter.notifyDataSetChanged();
