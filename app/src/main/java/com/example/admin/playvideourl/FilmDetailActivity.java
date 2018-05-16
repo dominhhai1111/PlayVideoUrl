@@ -2,6 +2,7 @@ package com.example.admin.playvideourl;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +11,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import org.w3c.dom.Comment;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,23 +33,59 @@ public class FilmDetailActivity extends AppCompatActivity {
     Button btnWatch;
     Button btnAddToFavorite;
     ListView lvComment;
-    String film_url;
+    CommentAdapter commentAdapter;
+    List<Comment> commentList = new ArrayList<>();
+
+    Film film;
+    String userId;
+    SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_film_detail);
         Intent intent1 = getIntent();
-        film_url = intent1.getStringExtra("film_url");
+        film = (Film) intent1.getSerializableExtra("film");
+
+        sharedPreferences = getSharedPreferences("user_info", MODE_PRIVATE);
+        this.userId = sharedPreferences.getString("user_id", "");
+
+        txtName = findViewById(R.id.txtName);
+        txtName.setText(film.getName());
+        txtTime = findViewById(R.id.txtTime);
+        txtTime.setText(film.getTime());
+        txtDetail = findViewById(R.id.txtDetail);
+        txtDetail.setText(film.getDetail());
+
+        lvComment = findViewById(R.id.lvComments);
+        commentAdapter = new CommentAdapter(this, commentList);
+        lvComment.setAdapter(commentAdapter);
 
         btnWatch = findViewById(R.id.btnWatch);
         btnWatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(FilmDetailActivity.this, "watch", Toast.LENGTH_LONG).show();
                 Intent intent2 = new Intent(FilmDetailActivity.this, MainActivity.class);
-                intent2.putExtra("film_url", film_url);
+                intent2.putExtra("film_url", film.getUrl());
                 startActivity(intent2);
             }
         });
+
+        btnAddToFavorite = findViewById(R.id.btnAddToFavorite);
+        btnAddToFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddToFavoriteAsyncTask addToFavoriteAsyncTask = new AddToFavoriteAsyncTask(
+                        FilmDetailActivity.this,
+                        userId,
+                        film.getId());
+                addToFavoriteAsyncTask.execute();
+            }
+        });
+
+        ReadCommentAsynctask readCommentAsynctask = new ReadCommentAsynctask();
+        readCommentAsynctask.execute();
     }
 
     public class ReadCommentAsynctask extends AsyncTask<Void, List<com.example.admin.playvideourl.Comment>, Void> {
@@ -62,21 +97,33 @@ public class FilmDetailActivity extends AppCompatActivity {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             APIService apiService = retrofit.create(APIService.class);
-            Call<List<com.example.admin.playvideourl.Comment>> call = apiService.getCommentsByFilmId();
-            call.enqueue(new Callback<List<Film>>() {
+            Call<List<com.example.admin.playvideourl.Comment>> call = apiService.getCommentsByFilmId(film.getId());
+            call.enqueue(new Callback<List<com.example.admin.playvideourl.Comment>>() {
                 @Override
-                public void onResponse(Call<List<Film>> call, Response<List<Film>> response) {
-                    List<Film> films = response.body();
-                    publishProgress(films);
-                    Log.d(TAG, "Films connect - abc");
+                public void onResponse(Call<List<com.example.admin.playvideourl.Comment>> call, Response<List<com.example.admin.playvideourl.Comment>> response) {
+                    List<com.example.admin.playvideourl.Comment> comments = response.body();
+                    Log.d("call-comment", "123");
+                    publishProgress(comments);
                 }
 
                 @Override
-                public void onFailure(Call<List<Film>> call, Throwable t) {
+                public void onFailure(Call<List<com.example.admin.playvideourl.Comment>> call, Throwable t) {
                     Log.e(TAG, "onFailure: " + t.getMessage());
                 }
             });
             return null;
         }
+
+        @Override
+        protected void onProgressUpdate(List<Comment>... values) {
+            super.onProgressUpdate(values);
+            commentList.clear();
+            commentList.addAll(values[0]);
+            commentAdapter.notifyDataSetChanged();
+        }
     }
 }
+
+
+
+

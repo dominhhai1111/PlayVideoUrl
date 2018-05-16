@@ -16,12 +16,15 @@ public class Film implements Serializable{
     private String time;
     @SerializedName("url")
     private String url;
+    @SerializedName("detail")
+    private String detail;
 
-    public Film(String id, String name, String time, String url) {
+    public Film(String id, String name, String time, String url, String detail) {
         this.id = id;
         this.name = name;
         this.time = time;
         this.url = url;
+        this.detail = detail;
     }
 
     public String getName() {
@@ -54,5 +57,13 @@ public class Film implements Serializable{
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }
